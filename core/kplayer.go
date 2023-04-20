@@ -45,6 +45,7 @@ var (
 	AudioSampleRate    CoreKplayerOption = "audio_sample_rate"
 	AudioChannelLayout CoreKplayerOption = "audio_channel_layout"
 	AudioChannels      CoreKplayerOption = "audio_channels"
+	AudioTrackOption     CoreKplayerOption = "audio_track"
 	VideoFillStrategy  CoreKplayerOption = "video_fill_strategy"
 )
 
@@ -58,6 +59,7 @@ var libKplayerInstance *libKplayer = &libKplayer{
 	audio_sample_rate:     44100,
 	audio_channel_layout:  3,
 	audio_channels:        2,
+	audio_track:           1,
 	cache_on:              false,
 	skip_invalid_resource: false,
 	video_fill_strategy:   0,
@@ -77,6 +79,7 @@ type libKplayer struct {
 	audio_sample_rate    uint32
 	audio_channel_layout uint32
 	audio_channels       uint32
+	audio_track          uint32
 	video_fill_strategy  int32
 
 	// options
@@ -118,6 +121,8 @@ func (lb *libKplayer) SetOptions(options map[CoreKplayerOption]interface{}) erro
 			libKplayerInstance.audio_channel_layout = value.(uint32)
 		case AudioChannels:
 			libKplayerInstance.audio_channels = value.(uint32)
+		case AudioTrackOption:
+			libKplayerInstance.audio_track = value.(uint32)
 		}
 	}
 	return nil
@@ -227,6 +232,7 @@ func (lb *libKplayer) Initialization() {
 		C.int(lb.audio_sample_rate),
 		C.int(lb.audio_channel_layout),
 		C.int(lb.audio_channels),
+		C.int(lb.audio_track),
 		C.int(lb.video_fill_strategy))
 }
 
